@@ -1,0 +1,77 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "train_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/MTR/tools/train.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/waymo/mtr_train500_val150_data.yaml",
+                "--batch_size",
+                "3",
+                "--epochs",
+                "1",
+                "--extra_tag",
+                "ex_ba3_ep1_t2_v2_debug"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+        },
+        {
+            "name": "mtr_val_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/mtr_val_debug.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/waymo/mtr_val_debug_data.yaml",
+                "--batch_size",
+                "7",
+                "--epochs",
+                "5",
+                "--not_eval_with_train",
+                "--ckpt",
+                "/media/simple/Data/WorkSpace/DFPred/mtr_output/ex_ba6_ep5_t2_v1/ckpt/checkpoint_epoch_5.pth",
+                "--extra_tag",
+                "ex_ba6_ep5_t2_v1"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+        },
+        {
+            "name": "mtr_DF_val_test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/mtr_val_debug.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/waymo/mtr_DF_val_data.yaml",
+                "--batch_size",
+                "7",
+                "--epochs",
+                "5",
+                "--not_eval_with_train",
+                "--ckpt",
+                "/media/simple/Data/WorkSpace/DFPred/mtr_output/ex_ba6_ep5_t2_v1/ckpt/checkpoint_epoch_5.pth",
+                "--extra_tag",
+                "DF_ex_ba7_ep5_t2_v1"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+        }
+    ]
+}
