@@ -2,76 +2,147 @@
     // 使用 IntelliSense 了解相关属性。 
     // 悬停以查看现有属性的描述。
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
+
+    
+    // debugpy 前确定自己当前的 workspaceFolder在EDA目录
+    "version": "0.2.0", 
     "configurations": [
         {
-            "name": "train_debug",
+            "name": "waymo_train_debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/MTR/tools/train.py",
+            "program": "${workspaceFolder}/tools/train.py",
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/waymo/mtr_train500_val150_data.yaml",
+                "cfgs/waymo/eda+25_percent_data.yaml",
                 "--batch_size",
                 "3",
                 "--epochs",
-                "1",
+                "2",
+                "--not_eval_with_train",
                 "--extra_tag",
-                "ex_ba3_ep1_t2_v2_debug"
+                "eda_b3_e2_t25_v50_debug"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
         },
         {
-            "name": "mtr_val_debug",
+            "name": "waymo_val_debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/tools/mtr_val_debug.py",
+            "program": "${workspaceFolder}/tools/val.py",
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/waymo/mtr_val_debug_data.yaml",
+                "cfgs/waymo/eda+25_percent_data.yaml",
                 "--batch_size",
-                "7",
+                "3",
                 "--epochs",
-                "5",
+                "2",
                 "--not_eval_with_train",
                 "--ckpt",
-                "/media/simple/Data/WorkSpace/DFPred/mtr_output/ex_ba6_ep5_t2_v1/ckpt/checkpoint_epoch_5.pth",
+                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
                 "--extra_tag",
-                "ex_ba6_ep5_t2_v1"
+                "eda_b3_e2_t25_v50_debug"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
         },
         {
-            "name": "mtr_DF_val_test",
+            "name": "waymo_test_debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/tools/mtr_val_debug.py",
+            "program": "${workspaceFolder}/tools/test.py",
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/waymo/mtr_DF_val_data.yaml",
+                "cfgs/waymo/eda+25_percent_data.yaml",
                 "--batch_size",
-                "7",
+                "3",
                 "--epochs",
-                "5",
+                "2",
                 "--not_eval_with_train",
                 "--ckpt",
-                "/media/simple/Data/WorkSpace/DFPred/mtr_output/ex_ba6_ep5_t2_v1/ckpt/checkpoint_epoch_5.pth",
+                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
                 "--extra_tag",
-                "DF_ex_ba7_ep5_t2_v1"
+                "eda_b3_e2_t25_v50_debug"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/MTR/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+        },
+        {
+            "name": "dfPred_train_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/train.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/dfPred/eda+100_percent_data.yaml",
+                "--batch_size",
+                "3",
+                "--epochs",
+                "2",
+                "--not_eval_with_train",
+                "--extra_tag",
+                "eda_b3_e2_t25_v50_debug"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+        },
+        {
+            "name": "dfPred_val_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/val.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/dfPred/eda+100_percent_data.yaml",
+                "--batch_size",
+                "3",
+                "--epochs",
+                "2",
+                "--not_eval_with_train",
+                "--ckpt",
+                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
+                "--extra_tag",
+                "eda_b3_e2_t25_v50_debug"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+        },
+        {
+            "name": "dfPred_ test_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/test.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/dfPred/eda+100_percent_data.yaml",
+                "--batch_size",
+                "3",
+                "--ckpt",
+                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
+                "--extra_tag",
+                "eda_b3_e2_t25_v50_debug"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
         }
     ]
 }

@@ -16,9 +16,6 @@ import torch.nn as nn
 import torch.optim.lr_scheduler as lr_sched
 from tensorboardX import SummaryWriter
 
-import sys
-sys.path.append('/media/simple/Data/WorkSpace/DFPred/EDA')
-
 from MTR.mtr.datasets import build_dataloader
 from MTR.mtr.config import cfg, cfg_from_list, cfg_from_yaml_file, log_config_to_file
 from eda.utils import common_utils
@@ -101,7 +98,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     ckpt_dir.mkdir(parents=True, exist_ok=True)
 
-    log_file = output_dir / ('log_train_%s.txt' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
+    log_file = output_dir / ('log_val_%s.txt' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
     logger = common_utils.create_logger(log_file, rank=cfg.LOCAL_RANK)
 
     # log to file
@@ -188,31 +185,31 @@ def main():
     eval_output_dir = output_dir / 'eval' / 'eval_with_train'
     eval_output_dir.mkdir(parents=True, exist_ok=True)
 
-    # -----------------------start training---------------------------
-    logger.info('**********************Start training %s/%s(%s)**********************'
-                % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
-    train_model(
-        model,
-        optimizer,
-        train_loader,
-        optim_cfg=cfg.OPTIMIZATION,
-        start_epoch=start_epoch,
-        total_epochs=args.epochs,
-        start_iter=it,
-        rank=cfg.LOCAL_RANK,
-        ckpt_save_dir=ckpt_dir,
-        train_sampler=train_sampler,
-        ckpt_save_interval=args.ckpt_save_interval,
-        max_ckpt_save_num=args.max_ckpt_save_num,
-        merge_all_iters_to_one_epoch=args.merge_all_iters_to_one_epoch,
-        tb_log=tb_log,
-        scheduler=scheduler,
-        logger=logger,
-        eval_output_dir=eval_output_dir,
-        test_loader=test_loader if not args.not_eval_with_train else None,
-        cfg=cfg, dist_train=dist_train, logger_iter_interval=args.logger_iter_interval,
-        ckpt_save_time_interval=args.ckpt_save_time_interval
-    )
+    # # -----------------------start training---------------------------
+    # logger.info('**********************Start training %s/%s(%s)**********************'
+    #             % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
+    # train_model(
+    #     model,
+    #     optimizer,
+    #     train_loader,
+    #     optim_cfg=cfg.OPTIMIZATION,
+    #     start_epoch=start_epoch,
+    #     total_epochs=args.epochs,
+    #     start_iter=it,
+    #     rank=cfg.LOCAL_RANK,
+    #     ckpt_save_dir=ckpt_dir,
+    #     train_sampler=train_sampler,
+    #     ckpt_save_interval=args.ckpt_save_interval,
+    #     max_ckpt_save_num=args.max_ckpt_save_num,
+    #     merge_all_iters_to_one_epoch=args.merge_all_iters_to_one_epoch,
+    #     tb_log=tb_log,
+    #     scheduler=scheduler,
+    #     logger=logger,
+    #     eval_output_dir=eval_output_dir,
+    #     test_loader=test_loader if not args.not_eval_with_train else None,
+    #     cfg=cfg, dist_train=dist_train, logger_iter_interval=args.logger_iter_interval,
+    #     ckpt_save_time_interval=args.ckpt_save_time_interval
+    # )
 
     logger.info('**********************End training %s/%s(%s)**********************\n\n\n'
                 % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
@@ -233,10 +230,20 @@ def main():
     )
 
     from test import repeat_eval_ckpt, eval_single_ckpt
-    repeat_eval_ckpt(
-        model.module if dist_train else model,
-        test_loader, args, eval_output_dir, logger, ckpt_dir,
-        dist_test=dist_train
+    # repeat_eval_ckpt(
+    #     model.module if dist_train else model,
+    #     test_loader, args, eval_output_dir, logger, ckpt_dir,
+    #     dist_test=dist_train
+    # )
+    
+    eval_single_ckpt(
+    model.module if dist_train else model,
+    test_loader,
+    args,
+    eval_output_dir,
+    logger,
+    args.ckpt,
+    dist_test=dist_train
     )
 
     logger.info('**********************End evaluation %s/%s(%s)**********************' %

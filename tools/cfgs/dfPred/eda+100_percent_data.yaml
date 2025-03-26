@@ -15,7 +15,7 @@ DATA_CONFIG:
     }
 
     SAMPLE_INTERVAL: {
-        'train': 2, 
+        'train': 1, 
         'test': 1
     }
 
