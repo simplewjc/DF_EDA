@@ -2,6 +2,7 @@
 export PYTHONPATH=$PYTHONPATH:/media/simple/Data/WorkSpace/DFPred/EDA
 
 # make sure the cwd in EDA/tools
+# cuda_memory about 3G/batch_size in train
 python3 train.py \
     --cfg_file cfgs/waymo/eda+25_percent_data.yaml \
     --batch_size 3 \

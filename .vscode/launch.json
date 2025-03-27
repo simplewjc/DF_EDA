@@ -111,12 +111,12 @@
                 "--batch_size",
                 "3",
                 "--epochs",
-                "2",
+                "30",
                 "--not_eval_with_train",
                 "--ckpt",
-                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
+                "../output/waymo/mtr+25_percent_data/mtr_b7_e30_t25_v100/ckpt/checkpoint_epoch_18.pth",
                 "--extra_tag",
-                "eda_b3_e2_t25_v50_debug"
+                "mtr_b7_e30_t25_v100"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
