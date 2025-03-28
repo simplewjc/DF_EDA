@@ -114,7 +114,7 @@
                 "30",
                 "--not_eval_with_train",
                 "--ckpt",
-                "../output/waymo/mtr+25_percent_data/mtr_b7_e30_t25_v100/ckpt/checkpoint_epoch_18.pth",
+                "../output/waymo/mtr+25_percent_data/mtr_b7_e30_t25_v100/ckpt/checkpoint_epoch_29.pth",
                 "--extra_tag",
                 "mtr_b7_e30_t25_v100"
             ],
