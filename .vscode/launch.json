@@ -85,14 +85,14 @@
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/dfPred/eda+100_percent_data.yaml",
+                "cfgs/dfPred/eda_TYPE_CYCLIST_data.yaml",
                 "--batch_size",
                 "3",
                 "--epochs",
-                "2",
+                "10",
                 "--not_eval_with_train",
                 "--extra_tag",
-                "eda_b3_e2_t25_v50_debug"
+                "eda_b3_e10_t100_v50_debug"
             ],
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
