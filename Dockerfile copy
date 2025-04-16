@@ -1,0 +1,110 @@
+# 启用 BuildKit 加速构建
+# DOCKER_BUILDKIT=1 docker build -t df_image .
+
+# 基础镜像：Ubuntu 20.04 + CUDA 11.7
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
+
+# 避免 tzdata 卡住交互
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 更换 apt 源为清华镜像源，加速包的下载
+RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list && \
+    apt-get update && apt-get install -y \
+    python3-pip \
+    wget git curl vim build-essential ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Miniconda
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p $CONDA_DIR && \
+    rm /tmp/miniconda.sh
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+# 更换 Conda 源为清华镜像
+RUN echo -e "channels:\n  - pytorch\n  - defaults\nshow_channel_urls: true\n\
+default_channels:\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2\n\
+custom_channels:\n  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" > /root/.condarc
+
+# 安装 mamba (更快的 conda 替代品)
+RUN conda install mamba -c conda-forge
+
+# 复制环境文件并创建环境
+COPY environment.yml /tmp/environment.yml
+RUN mamba env create -f /tmp/environment.yml -y && conda clean -afy
+
+# 激活 Conda 环境并配置 bash 启动时自动激活
+ENV CONDA_DEFAULT_ENV=eda
+ENV PATH /opt/conda/envs/eda/bin:$PATH
+RUN conda init bash && \
+    echo "conda activate eda" >> ~/.bashrc
+
+# 复制项目代码
+WORKDIR /workspace
+COPY . /workspace/EDA
+
+# 清理不必要的文件，减小镜像体积
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
+
+# 设置默认启动指令（可覆盖）
+CMD ["bash"]
+
+
+# 启用 BuildKit 加速构建
+# DOCKER_BUILDKIT=1 docker build -t df_image .
+
+# 基础镜像：Ubuntu 20.04 + CUDA 11.7
+FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
+
+# 避免 tzdata 卡住交互
+ENV DEBIAN_FRONTEND=noninteractive
+
+# 更新 apt 源为清华镜像源
+RUN sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list && \
+    apt-get update && apt-get install -y \
+    python3-pip \
+    wget git curl vim build-essential ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# 安装 Miniconda
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    bash /tmp/miniconda.sh -b -p $CONDA_DIR && \
+    rm /tmp/miniconda.sh
+
+# 更新环境变量
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+# 更换 Conda 源为清华镜像
+RUN echo -e "channels:\n  - pytorch\n  - defaults\nshow_channel_urls: true\n\
+default_channels:\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r\n  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2\n\
+custom_channels:\n  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud\n\
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" > /root/.condarc
+
+# 安装 mamba (更快的 conda 替代品)
+RUN conda install mamba -c conda-forge
+
+RUN mamba create -n eda python=3.8 -y
+RUN mamba activate eda
+RUN mamba install numpy pyyaml scikit-image tqdm -y
+RUN mamba install pytorch=1.12.0 torchvision=0.13.0 torchaudio=0.12.0 cudatoolkit=11.3 -c pytorch -y
+RUN pip install tensorboardX easydict mpi4py -y 
+
+# 激活 Conda 环境并配置 bash 启动时自动激活
+ENV CONDA_DEFAULT_ENV=eda
+
+ENV PATH /opt/conda/envs/eda/bin:$PATH
+
+RUN conda init bash && \
+    echo "conda activate eda" >> ~/.bashrc
+
+# 复制项目代码
+WORKDIR /workspace
+COPY . /workspace/EDA
+
+# 清理不必要的文件，减小镜像体积
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
+
+# 设置默认启动指令（可覆盖）
+CMD ["bash"]

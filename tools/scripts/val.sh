@@ -10,5 +10,18 @@ python3 val.py \
     --batch_size 3 \
     --epochs 30 \
     --not_eval_with_train \
-    --ckpt ../output/waymo/mtr+25_percent_data/mtr_b7_e30_t25_v100/ckpt/checkpoint_epoch_27.pth\
-    --extra_tag mtr_b7_e30_t25_v100
+    --ckpt ../output/dfPred/eda+100_percent_data/1/checkpoint_epoch_44.pth \
+    --extra_tag eda_df_b8_e30_t100
+
+# python3 val.py \
+#     --cfg_file cfgs/dfPred/eda+100_percent_data.yaml \
+#     --batch_size 3 \
+#     --epochs 30 \
+#     --not_eval_with_train \
+#     --ckpt ../output/dfPred/eda+100_percent_data/eda_df_after_waymo/checkpoint_epoch_40.pth \
+#     --extra_tag eda_df_after_waymo
+
+
+# ../output/dfPred/eda+100_percent_data/eda_b3_e30_t100_v100/ckpt/checkpoint_epoch_21.pth
+
+# ../output/waymo/eda+50_percent_data/eda_b8_e30_t50_v25_new/ckpt/checkpoint_epoch_23.pth

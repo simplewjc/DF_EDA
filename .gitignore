@@ -12,3 +12,4 @@ data/
 *.png
 *.html
 df/df_output/
+output_docker_use/

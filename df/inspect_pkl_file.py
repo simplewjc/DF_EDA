@@ -4,7 +4,7 @@ import pickle
 #file_path = "/media/simple/Data/DFPred_Dataset/processed_scenarios_training_infos.pkl"
 #file_path = "/media/simple/Data/DFPred_Dataset/processed_training_testing_A_full/gt_data_df_test_A.pkl"
 file_path = "/media/simple/Data/DFPred_Dataset/processed_scenarios_training_cyclist_infos.pkl"
-
+file_path = "/media/simple/Data/WorkSpace/DFPred/EDA/output/dfPred/df_eda_test/eda_df_result_debug/eval/epoch_30/default/result_nms-2.5.pkl"
 
 # 加载数据
 with open(file_path, "rb") as f:

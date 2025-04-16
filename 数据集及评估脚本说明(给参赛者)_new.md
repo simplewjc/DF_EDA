@@ -1,0 +1,563 @@
+更新时间：2025.4.15
+## 一、 数据集说明
+
+| 数据集/用途           | 文件或文件夹名称                                    | 数据说明                        | 备注           |
+| ---------------- | ------------------------------------------- | --------------------------- | ------------ |
+| **训练集**          | `processed_scenarios_training`              | 训练集（完整 10s 数据）              |              |
+| **训练集摘要文件**      | `processed_scenarios_training_infos.pkl`    | 训练集摘要信息（完整 10s 数据）          |              |
+| **验证集**          | `processed_scenarios_validation`            | 验证集（完整 10s 数据）              |              |
+| **验证集摘要文件**      | `processed_scenarios_val_infos.pkl`         | 验证集摘要信息（完整 10s 数据）          |              |
+| **小测试集（部分）**     | `processed_scenarios_testing_A_part`        | 仅 1s 数据，场景数 20，可供本地测试或提交前测试 |              |
+| **小测试集摘要文件（部分）** | `processed_scenarios_testA_part_infos.pkl`  | 小测试集摘要信息（对应上方 1s 数据）        |              |
+| **小测试集（完整）**     | `processed_scenarios_testing_A_full`        | 10s 数据，场景数 20，可供本地测试或提交前测试  |              |
+| **小测试集摘要文件（完整）** | `processed_scenarios_testA_full_infos.pkl`  | 小测试集摘要信息（对应上方 10s 数据）       |              |
+| **大测试集（部分）**     | `processed_scenarios_testing_B1_part`       | 仅 1s 数据，场景数 5000+           | ==增加，终评打分用== |
+| **大测试集摘要文件（部分）** | `processed_scenarios_testB1_part_infos.pkl` | 大测试集摘要信息（对应上方 1s 数据）        | ==增加，终评打分用== |
+
+## 二、场景文件数据结构
+
+本文档详细描述了 `.pkl` 文件中使用的数据结构和变量要求。该文件用于存储和传递场景数据，包括轨迹信息、地图特征、动态状态等。我们使用的主要数据类型是 Python 字典（`dict`）和 NumPy 数组（`ndarray`）。每个场景包含多个组成部分，每个部分根据不同需求存储相应的数据信息。
+
+### 1. 场景信息
+场景元数据包含每个场景的基本信息，例如场景ID、时间戳、当前时间帧等，帮助模型了解当前场景的上下文。
+
+- **变量**:
+    - `scenario_id`: `int` - 场景的唯一标识符。
+    - `timestamps_seconds`: `list[int]` - 时间戳列表，表示场景中每一帧的时间，单位为秒。
+    - `current_time_index`: `int` - 当前时间戳的索引，指示当前时刻在 `timestamps_seconds` 中的位置。
+    - `sdc_track_index`: `int` - 自主驾驶车辆（SDC）的轨迹索引。
+    - `objects_of_interest`: `list[int]` - 需要关注的物体ID列表，用于标识重点监控的目标物体。
+    - `tracks_to_predict`: `dict` - 需要预测的轨迹信息，包括轨迹ID、难度等级和物体类型。
+
+#### 示例：
+```python
+{
+    "scenario_id": '637f20cafde22ff8',
+    "timestamps_seconds": [0.0, 0.10002, 0.20004, ... ,9.00004],
+    "current_time_index": 10,
+    "sdc_track_index": 82,
+    "objects_of_interest": [], 
+    "tracks_to_predict": {
+        "track_index": [1, 2],
+        "difficulty": [1, 2], 
+        "object_type": ["TYPE_PEDESTRIAN", "TYPE_VEHICLE"]
+    }
+}
+```
+
+### 2. 轨迹数据 (Track Data)
+轨迹数据用于表示场景中物体（如车辆、行人等）的动态行为。每个物体的轨迹包括时间序列信息，如物体在不同时刻的位置信息、速度信息等。
+
+- **变量**:
+  - `track_infos`: 存储轨迹数据的字典。
+    - **类型**: `dict`
+    - **字段**:
+      - `object_id`: `list[int]` - 每个物体的唯一标识符ID。
+      - `object_type`: `list[str]` - 物体类型，例如 `vehicle`, `pedestrian`, `cyclist` 等。
+      - `trajs`: `ndarray` - 形状为 `(num_objects, num_timestamps, 9)` 的数组，表示物体在多个时间戳下的轨迹数据。每个轨迹数据包括以下9个属性：
+        - `center_x`: 物体中心点的X坐标，单位为米。
+        - `center_y`: 物体中心点的Y坐标，单位为米。
+        - `center_z`: 物体中心点的Z坐标，单位为米。
+        - `length`: 物体的长度，单位为米。
+        - `width`: 物体的宽度，单位为米。
+        - `height`: 物体的高度，单位为米。
+        - `heading`: 物体朝向的角度，单位为弧度。
+        - `velocity_x`: 物体沿X轴的速度，单位为米/秒。
+        - `velocity_y`: 物体沿Y轴的速度，单位为米/秒。
+        - `valid`: 是否有效。 
+
+#### 示例：
+```python
+{
+    "object_id": [1, 2],
+    "object_type": ["TYPE_PEDESTRIAN", "TYPE_VEHICLE"],
+    "trajs": array([[[-7.79200342e+03, -6.68517188e+03, -1.84568893e+02,  4.77667904e+00,  2.06968188e+00,  1.53438318e+00, -1.54528213e+00,  0.00000000e+00,  0.00000000e+00,  1.00000000e+00],
+    ... *num_timestamps],
+
+    [[-7.78250586e+03, -6.68325391e+03, -1.84422928e+02,  4.62047482e+00,  1.96498990e+00,  1.50093818e+00, -1.54809880e+00,  0.00000000e+00,  0.00000000e+00,  1.00000000e+00],
+    ... *num_timestamps],])
+
+}
+```
+
+### 3. 地图特征数据 (Map Features)
+地图特征描述场景中的静态地图信息，如车道、红绿灯、道路标线等。这些信息帮助模型理解环境布局，做出相应的预测和决策。
+
+- **变量**:
+  - `map_infos`: 存储地图特征数据的字典。
+    - **类型**: `dict`
+    - **字段**:
+      - `all_polylines`: `ndarray` - 多边形坐标数组，形状为 `(num_points, 7): [x, y, z, dir_x, dir_y, dir_z, global_type]`
+            其中，num_points 场景中所有多边形（polyline）的坐标点数量。
+      - `lane`: `list[dict]` - 每个字典表示一个人行道，包含其 ID 和与多段线相关的 polyline_index（用于指定该人行道在 all_polylines 中对应的坐标段）。
+      - `road_line`: `list[dict]` - 道路标线信息，描述道路上的标线类型（如实线、虚线）及其位置。
+      - `road_edge`: `list[dict]` - 道路边缘信息，表示道路的边界。
+      - `stop_sign`: `list[dict]` - 停车标志信息，表示停车位置及相关车道信息。
+      - `crosswalk`: `list[dict]` - 人行道信息，包含其坐标及其他标识。
+      - `speed_bump`: `list[dict]` - 减速带信息，包含坐标和尺寸。
+
+
+#### 示例：
+```python
+ 'map_infos': {'all_polylines': array([[ 8.3051895e+03, -3.5825547e+03, -2.5827078e+01, ...,
+         0.0000000e+00,  0.0000000e+00,  1.5000000e+01],
+       [ 8.3053223e+03, -3.5820747e+03, -2.5831131e+01, ...,
+         9.6391273e-01, -8.1427665e-03,  1.5000000e+01],
+       [ 8.3054541e+03, -3.5815947e+03, -2.5835186e+01, ...,
+         9.6389169e-01, -8.1427665e-03,  1.5000000e+01],
+       ...,
+       [ 8.3360957e+03, -3.3328171e+03, -2.7672213e+01, ...,
+        -9.6618420e-01,  0.0000000e+00,  1.8000000e+01],
+       [ 8.3393643e+03, -3.3336938e+03, -2.7672213e+01, ...,
+        -2.5911370e-01,  0.0000000e+00,  1.8000000e+01],
+       [ 8.3347588e+03, -3.3236943e+03, -2.5283100e+01, ...,
+         0.0000000e+00,  0.0000000e+00,  1.7000000e+01]], dtype=float32),
+        'crosswalk': [{'id': 294, 'polyline_index': (28271, 28279)},
+                    {'id': 295, 'polyline_index': (28279, 28283)},
+                    {'id': 296, 'polyline_index': (28283, 28287)},
+                    {'id': 297, 'polyline_index': (28287, 28291)},
+                    {'id': 298, 'polyline_index': (28291, 28295)},
+                    {'id': 299, 'polyline_index': (28295, 28299)},
+                    {'id': 300, 'polyline_index': (28299, 28303)},
+                    {'id': 301, 'polyline_index': (28303, 28307)},
+                    {'id': 302, 'polyline_index': (28307, 28317)},
+                    {'id': 303, 'polyline_index': (28317, 28321)},
+                    {'id': 304, 'polyline_index': (28321, 28325)}],
+        'lane': [{'entry_lanes': [],
+                'exit_lanes': [158, 157],
+                'id': 142,
+                'interpolating': False,
+                'left_boundary': [{'boundary_type': 6,
+                                    'end_index': 45,
+                                    'feature_id': 5,
+                                    'start_index': 0}],
+                'polyline_index': (16836, 16882),
+                'right_boundary': [{'boundary_type': 'TYPE_BROKEN_SINGLE_WHITE',
+                                    'end_index': 45,
+                                    'feature_id': 7,
+                                    'start_index': 0}],
+                'speed_limit_mph': 35.0,
+                'type': 'TYPE_SURFACE_STREET'}, ...],
+        'road_edge': [{'id': 3,
+                        'polyline_index': (0, 164),
+                    'type': 'TYPE_ROAD_EDGE_BOUNDARY'},
+                    {'id': 4,
+                    'polyline_index': (164, 573),
+                    'type': 'TYPE_ROAD_EDGE_MEDIAN'},...]，
+        'stop_sign': [{'id': 305,
+            'lane_ids': [284],
+            'polyline_index': (28325, 28326),
+            'position': array([ 8334.75876294, -3323.69424315,   -25.2831008 ])}]},
+}
+```
+#### type 定义
+
+``` python
+object_type = {
+
+0: 'TYPE_UNSET',
+
+1: 'TYPE_VEHICLE',
+
+2: 'TYPE_PEDESTRIAN',
+
+3: 'TYPE_CYCLIST',
+
+4: 'TYPE_OTHER'
+
+}
+
+  
+
+lane_type = {
+
+0: 'TYPE_UNDEFINED',
+
+1: 'TYPE_FREEWAY',
+
+2: 'TYPE_SURFACE_STREET',
+
+3: 'TYPE_BIKE_LANE'
+
+}
+
+  
+
+road_line_type = {
+
+0: 'TYPE_UNKNOWN',
+
+1: 'TYPE_BROKEN_SINGLE_WHITE',
+
+2: 'TYPE_SOLID_SINGLE_WHITE',
+
+3: 'TYPE_SOLID_DOUBLE_WHITE',
+
+4: 'TYPE_BROKEN_SINGLE_YELLOW',
+
+5: 'TYPE_BROKEN_DOUBLE_YELLOW',
+
+6: 'TYPE_SOLID_SINGLE_YELLOW',
+
+7: 'TYPE_SOLID_DOUBLE_YELLOW',
+
+8: 'TYPE_PASSING_DOUBLE_YELLOW'
+
+}
+
+  
+
+road_edge_type = {
+
+0: 'TYPE_UNKNOWN',
+
+// Physical road boundary that doesn't have traffic on the other side (e.g.,
+
+// a curb or the k-rail on the right side of a freeway).
+
+1: 'TYPE_ROAD_EDGE_BOUNDARY',
+
+// Physical road boundary that separates the car from other traffic
+
+// (e.g. a k-rail or an island).
+
+2: 'TYPE_ROAD_EDGE_MEDIAN'
+
+}
+
+  
+
+polyline_type = {
+
+for lane
+
+'TYPE_UNDEFINED': -1,
+
+'TYPE_FREEWAY': 1,
+
+'TYPE_SURFACE_STREET': 2,
+
+'TYPE_BIKE_LANE': 3,
+
+  
+
+for roadline
+
+'TYPE_UNKNOWN': -1,
+
+'TYPE_BROKEN_SINGLE_WHITE': 6,
+
+'TYPE_SOLID_SINGLE_WHITE': 7,
+
+'TYPE_SOLID_DOUBLE_WHITE': 8,
+
+'TYPE_BROKEN_SINGLE_YELLOW': 9,
+
+'TYPE_BROKEN_DOUBLE_YELLOW': 10,
+
+'TYPE_SOLID_SINGLE_YELLOW': 11,
+
+'TYPE_SOLID_DOUBLE_YELLOW': 12,
+
+'TYPE_PASSING_DOUBLE_YELLOW': 13,
+
+  
+
+for roadedge
+
+'TYPE_ROAD_EDGE_BOUNDARY': 15,
+
+'TYPE_ROAD_EDGE_MEDIAN': 16,
+
+  
+
+for stopsign
+
+'TYPE_STOP_SIGN': 17,
+
+  
+
+for crosswalk
+
+'TYPE_CROSSWALK': 18,
+
+  
+
+for speed bump
+
+'TYPE_SPEED_BUMP': 19
+
+}
+
+  
+  
+
+signal_state = {
+
+0: 'LANE_STATE_UNKNOWN',
+
+  
+
+// States for traffic signals with arrows.
+
+1: 'LANE_STATE_ARROW_STOP',
+
+2: 'LANE_STATE_ARROW_CAUTION',
+
+3: 'LANE_STATE_ARROW_GO',
+
+  
+
+// Standard round traffic signals.
+
+4: 'LANE_STATE_STOP',
+
+5: 'LANE_STATE_CAUTION',
+
+6: 'LANE_STATE_GO',
+
+  
+
+// Flashing light signals.
+
+7: 'LANE_STATE_FLASHING_STOP',
+
+8: 'LANE_STATE_FLASHING_CAUTION'
+
+}
+
+  
+
+signal_state_to_id = {}
+
+for key, val in signal_state.items():
+
+signal_state_to_id[val] = key
+```
+### 4. 动态地图状态 (Dynamic Map States)
+动态地图状态表示随时间变化的交通信息，如交通信号灯状态、停车点位置等。
+
+- **变量**:
+  - `dynamic_map_infos`: 存储动态状态数据的字典。
+    - **类型**: `dict`
+    - **字段**:
+      - `lane_id`: `list[ndarray]` - 每个时间戳对应的车道ID，形状为 `(num_timestamps, num_lanes)`。
+      - `state`: `list[ndarray]` - 每个时间戳对应的交通信号状态，形状为 `(num_timestamps, num_lanes)`，常见值为 `LANE_STATE_GO`, `LANE_STATE_CAUTION`, `LANE_STATE_STOP`,`LANE_STATE_UNKNOWN`。
+      - `stop_point`: `list[ndarray]` - 每个时间戳对应的停车点坐标，形状为 `(num_timestamps, num_points, 3)`，每个点包含 `[x, y, z]` 坐标。 `num_points = num_lanes`
+
+#### 示例：
+```python
+ 'dynamic_map_infos': {
+    "lane_id": [array([[167, 169, 170, 171, 172]]),array([[167, 169, 170, 171, 172, 173]]), ... *num_timestamps],
+    "state": [array([['LANE_STATE_GO', 'LANE_STATE_GO']], dtype='<U18'), array([['LANE_STATE_GO', 'LANE_STATE_GO']], dtype='<U18'), ... *num_timestamps],
+    "stop_point": [array([[[ 8283.65443547, -3474.08966639, -26.50221239], ... *num_points]]),
+    array([[[ 8283.65443547, -3474.08966639, -26.50221239], ... *num_points]]),... *num_timestamps],
+}
+```
+
+
+以上是关于 `.pkl` 文件数据结构与变量要求的完整说明，确保每个字段和数据类型的详细说明能够帮助开发人员理解和正确实现数据处理任务。
+
+## 三、 预测轨迹评价标准
+参赛者需要给出`tracks_to_predict`目标物的未来轨迹。 
+建议参赛者在提交前，本地测试本节提供的结果处理和评估脚本，确保`result.pkl`文件格式和内容正确。
+### 1）说明
+请务必使用 `waymo-open-dataset-tf-2-6-0` 中的 `py_metrics_ops.motion_metrics` 工具，无论您使用哪种模型进行预测。motion_metrics 是 Waymo 官方提供的评估工具，专门用于评估模型预测的轨迹准确性和一致性，确保与 Waymo 基准保持一致。
+
+最终指标，请分别评估VEHICLE，PEDESTRIAN，CYCLIST三种类型，预测轨迹前3s，5s，8s的以下指标'mAP', 'minADE', 'minFDE', 'MissRate'。
+
+### 2）result.pkl 的结构
+pred_dicts 列表中的每一项是一个字典，包含以下键：
+- `scenario_id`: 场景 ID，用于区分不同的场景或样本。
+- `track_index_to_predict`: 待预测对象的轨迹索引。(并且需要注意，预测目标物/轨迹的排序与原数据集的`tracks_to_predict`顺序一致)
+- `pred_trajs`: 模型预测的轨迹（或路径），通常是一个多模式的预测结果，每个模式包含若干时间步的坐标。（80帧，6模态）
+- `pred_scores`: 每个预测模式的置信度分数，表示模型对该预测模式的信任度。（6模态）
+- `object_id`: 对象的唯一标识符，用于区分场景中的不同对象。
+- `object_type`: 对象类型，例如车辆、行人、自行车等。
+
+（可以参考result(示例).txt）
+
+### 3）结果处理脚本
+#### 真值生成脚本 get_gt_data.py -> `gt_data.pkl`
+``` python
+import os
+import pickle
+
+def create_gt_data_from_processed_files(processed_dir, output_file):
+    """
+    从处理后的 Waymo 场景文件中提取 ground truth 轨迹信息，并保存至 gt_data.pkl
+    Args:
+        processed_dir (str): 已处理文件的目录，包含 `sample_{scenario_id}.pkl` 文件。
+        output_file (str): 保存 `gt_data.pkl` 的路径。
+    """
+    gt_data = {}
+
+    # 获取所有的处理后文件，以'sample_'开头并以'.pkl'结尾
+    scene_files = [f for f in os.listdir(processed_dir) if f.startswith('sample_') and f.endswith('.pkl')]
+
+    for scene_file in scene_files:
+        file_path = os.path.join(processed_dir, scene_file)
+        with open(file_path, 'rb') as f:
+            scene_data = pickle.load(f)
+        
+        scenario_id = scene_data['scenario_id']
+        
+        # 提取真实轨迹信息
+        gt_trajs = scene_data['track_infos']['trajs']
+        object_id = scene_data['track_infos']['object_id']
+        object_type = scene_data['track_infos']['object_type']
+        gt_is_valid = (gt_trajs[:, :, -1] > 0).astype(int)  # `valid` mask
+        tracks_to_predict = scene_data['tracks_to_predict']['track_index']
+        # 若为规划赛项使用
+        # tracks_to_predict = scene_data['sdc_track_index']
+
+        # 将提取的信息存入字典
+        gt_data[scenario_id] = {
+            'gt_trajs': gt_trajs, # 所有轨迹
+            'object_id': object_id,
+            'object_type': object_type,
+            'gt_is_valid': gt_is_valid,
+            'tracks_to_predict':tracks_to_predict
+        }
+        
+    # 保存 `gt_data.pkl`
+    with open(output_file, 'wb') as f:
+        pickle.dump(gt_data, f)
+    print(f"GT data saved to {output_file}")
+
+# 使用示例
+processed_dir = './data/waymo/processed_scenarios_for_competition'
+output_file = './PATH/TO/GT/gt_data.pkl'
+create_gt_data_from_processed_files(processed_dir, output_file)
+```
+
+### 4） 评估脚本 eval_gt_and_pred.py 
+输入 `result.pkl` 和 `gt_data.pkl`
+``` python
+import pickle
+import tensorflow as tf
+import numpy as np
+from waymo_eval import waymo_evaluation
+
+# 直接定义预测和真值数据文件路径
+PRED_FILE = './PATH/TO/RESULT/result.pkl'  # 替换为参赛者的预测文件路径
+GT_FILE = './PATH/TO/GT/gt_data.pkl'  # 替换为真值数据文件路径
+TOP_K = 6 # 规划改成1
+EVAL_SECOND = 8 # 3/5/8s
+NUM_MODES_FOR_EVAL = 6 # 规划改成1
+
+def load_data(pred_file, gt_file):
+    with open(pred_file, 'rb') as f:
+        pred_data = pickle.load(f)
+    with open(gt_file, 'rb') as f:
+        gt_data = pickle.load(f)
+    return pred_data, gt_data
+
+def format_for_evaluation(pred_data, gt_data):
+    """
+    将预测数据与真实数据进行匹配，生成评估所需的 `eval_data` 格式。
+    """
+    eval_data = []
+    for pred_scene in pred_data:
+        formatted_scene = []
+        scenario_id = pred_scene[0]['scenario_id']
+        
+        if scenario_id not in gt_data:
+            print(f"Warning: scenario_id {scenario_id} not found in ground truth data.")
+            continue
+        
+        gt_scene = gt_data[scenario_id]
+        assert len(pred_scene) == len(gt_scene['tracks_to_predict'])
+        i = 0   # 注意：顺序索引track_to_predict，因此你的预测轨迹也需要顺序排列
+        for obj_pred in pred_scene: 
+            obj_id = obj_pred['object_id']
+            if obj_id not in gt_scene['object_id']:
+                print(f"Warning: object_id {obj_id} in scenario {scenario_id} not found in ground truth data.")
+                continue
+
+            gt_idx = gt_scene['tracks_to_predict'][i]
+            # 获取预测和真值轨迹，保证轨迹长度符合要求
+            pred_trajs = obj_pred['pred_trajs'][:, :80, :]  # 预测轨迹长度限制为 80
+            gt_trajs = gt_scene['gt_trajs'][gt_idx][:91, :]  # 真值轨迹长度限制为 91
+            scores = obj_pred['pred_scores']  # shape: [M]
+            sorted_indices = np.argsort(-scores)
+            # 取前 TOP_K
+            topk_indices = sorted_indices[:TOP_K]
+            topk_scores = scores[topk_indices]
+            topk_trajs = pred_trajs[topk_indices, :, :]
+
+            # 创建格式化数据项
+            formatted_obj = {
+                'scenario_id': scenario_id,
+                'pred_trajs': topk_trajs,
+                'pred_scores': topk_scores,
+                'object_id': obj_id,
+                'object_type': obj_pred['object_type'],
+                'gt_trajs': gt_trajs
+            }
+            formatted_scene.append(formatted_obj)
+            i += 1
+        
+        if formatted_scene:
+            eval_data.append(formatted_scene)
+    return eval_data
+
+def evaluate():
+    # Step 1: Load Prediction and Ground Truth Data
+    pred_data, gt_data = load_data(PRED_FILE, GT_FILE)
+    
+    # Step 2: Format Prediction Data for Evaluation
+    eval_data = format_for_evaluation(pred_data, gt_data)
+    
+    # Step 3: Perform Waymo Evaluation
+    metric_results, result_format_str = waymo_evaluation(
+        pred_dicts=eval_data,
+        top_k=TOP_K,
+        eval_second=EVAL_SECOND,
+        num_modes_for_eval=NUM_MODES_FOR_EVAL
+    )
+    
+    # Step 4: Output Results
+    print("Evaluation Metrics:")
+    print(result_format_str)
+    for key, value in metric_results.items():
+        print(f"{key}: {value}")
+
+if __name__ == '__main__':
+    evaluate()
+```
+### 5）最终打印指标
+分别评估VEHICLE，PEDESTRIAN，CYCLIST三种类型，预测轨迹前3s，5s，8s的以下指标 `mAP`, `minADE`, `minFDE`, `MissRate`。
+
+格式示例：
+| Waymo       | mAP  | minADE | minFDE | MissRate |
+|:------------|:----:|-------:|-------:|---------:|
+| **VEHICLE** | 0.85 |    1.2 |    2.5 |     0.10 |
+| **PEDESTRIAN** | 0.78 |    1.5 |    3.0 |     0.15 |
+| **CYCLIST** | 0.80 |    1.3 |    2.8 |     0.12 |
+| **Avg**     | 0.81 |   1.33 |   2.77 |     0.12 |
+
+## 四. 规划轨迹评价标准
+参赛者给出`sdc_track_index`的未来规划轨迹(唯一)，时间长度8s。
+答案输出到`result.pkl`文件，处理脚本与上一节类似，请务必保证生成的`result.pkl`文件能够通过第三节的流程生成评估指标。
+
+### （1）result.pkl 的结构（复用第三节，略有些修改）
+pred_dicts 列表中的每一项是一个字典，包含以下键：
+- `scenario_id`: 场景 ID，用于区分不同的场景或样本。
+- `track_index_to_predict`: 待规划的目标物==（`sdc_track_index`）==索引
+- `pred_trajs`: 模型规划的轨迹（或路径），通常是一个多模式的预测结果，每个模式包含若干时间步的坐标。（80帧，**1模态**）
+- `pred_scores`: 用1.0替代。（1模态）
+- `object_id`: 对象的唯一标识符，用于区分场景中的不同对象
+- `object_type`: 对象类型，例如车辆、行人、自行车等
+
+### （2）评估指标
+- `精准性`： 评估指标minADE, minFDE获取方式与第三节的预测部分相同，使用waymo评估工具
+- `平滑性`： 轨迹曲率，加速度变化率
+- `安全性`：与其他道路参与者发生碰撞，超出道路边界
+	
+	**权重**：3：2：5
+## ==五. 提交要求==
+- 提交代码和配套的docker镜像，建议使用Nvidia提供的官方docker配置训练环境（容器ubuntu版本22.04/20.04，CUDA版本低于12.3，数据集的目录结构与原始结构相同，使用挂载的方法被容器使用）
+- **大测试集**上测试得到的`result.pkl`文件，无论预测还是规划赛项，都要将答案输出到`result.pkl`文件，并且在本地测试通过`eval_gt_and_pred.py`测试
+- 提交算法测试说明文档（包括数据集挂载路径、算法路径、模型路径、测试启动方式）和最终模型，辅助结果复现，用于确认参赛结果有效性
+- 提交算法说明文档（说明算法设计、算法先进性、创新点等）和效果演示视频/图片

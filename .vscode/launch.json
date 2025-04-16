@@ -25,7 +25,7 @@
                 "eda_b3_e2_t25_v50_debug"
             ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+                "PYTHONPATH": "${workspaceFolder}/tools"  
             },
             "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
         },
@@ -49,31 +49,7 @@
                 "eda_b3_e2_t25_v50_debug"
             ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
-            },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
-        },
-        {
-            "name": "waymo_test_debug",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${workspaceFolder}/tools/test.py",
-            "console": "integratedTerminal",
-            "args": [
-                "--cfg_file",
-                "cfgs/waymo/eda+25_percent_data.yaml",
-                "--batch_size",
-                "3",
-                "--epochs",
-                "2",
-                "--not_eval_with_train",
-                "--ckpt",
-                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
-                "--extra_tag",
-                "eda_b3_e2_t25_v50_debug"
-            ],
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+                "PYTHONPATH": "${workspaceFolder}/tools"  
             },
             "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
         },
@@ -95,9 +71,9 @@
                 "eda_b3_e10_t100_v50_debug"
             ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+                "PYTHONPATH": "${workspaceFolder}/tools"  
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  
         },
         {
             "name": "dfPred_val_debug",
@@ -119,30 +95,44 @@
                 "mtr_b7_e30_t25_v100"
             ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+                "PYTHONPATH": "${workspaceFolder}/tools"  
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  
         },
         {
-            "name": "dfPred_ test_debug",
+            "name": "dfPred_test_debug",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/tools/test.py",
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/dfPred/eda+100_percent_data.yaml",
+                "cfgs/dfPred/df_eda_test.yaml",
                 "--batch_size",
                 "3",
                 "--ckpt",
-                "../output/waymo/eda+25_percent_data/eda_b3_e2_t25_v50/ckpt/checkpoint_epoch_2.pth",
+                "../output/waymo/eda+50_percent_data/eda_b8_e30_t50_v25_new/ckpt/checkpoint_epoch_30.pth",
+                "--save_to_file",
                 "--extra_tag",
-                "eda_b3_e2_t25_v50_debug"
+                "eda_df_result_debug"
             ],
             "env": {
-                "PYTHONPATH": "${workspaceFolder}/tools"  // 设置环境变量，确保在 'tools' 目录下
+                "PYTHONPATH": "${workspaceFolder}/tools"  
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  // 设置当前工作目录为 'tools'
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  
+        },
+        {
+            "name": "eval_gt_and_pred_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/df/eval_gt_and_pred.py",
+            "console": "integratedTerminal",
+            "args": [
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/df"  
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA", 
         }
     ]
 }
