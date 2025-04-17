@@ -108,3 +108,13 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
 
 # 设置默认启动指令（可覆盖）
 CMD ["bash"]
+
+
+
+
+(eda) root@d2b7961527c3:~/workspace/EDA/tools# pip install https://storage.googleapis.com/tensorflow/waymo_open_dataset-1.4.8-cp38-cp38-linux_x86_64.whl
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting waymo-open-dataset==1.4.8
+  ERROR: HTTP error 404 while getting https://storage.googleapis.com/tensorflow/waymo_open_dataset-1.4.8-cp38-cp38-linux_x86_64.whl
+ERROR: Could not install requirement waymo-open-dataset==1.4.8 from https://storage.googleapis.com/tensorflow/waymo_open_dataset-1.4.8-cp38-cp38-linux_x86_64.whl because of HTTP error 404 Client Error: Not Found for url: https://storage.googleapis.com/tensorflow/waymo_open_dataset-1.4.8-cp38-cp38-linux_x86_64.whl for URL https://storage.googleapis.com/tensorflow/waymo_open_dataset-1.4.8-cp38-cp38-linux_x86_64.whl
+(eda) root@d2b7961527c3:~/workspace/EDA/tools# 

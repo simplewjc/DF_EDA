@@ -13,3 +13,4 @@ data/
 *.html
 df/df_output/
 output_docker_use/
+result/

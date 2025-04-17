@@ -44,7 +44,9 @@ RUN conda create -n eda python=3.8 -y && \
     conda run -n eda python -m pip install pip==21.2.4 && \
     conda run -n eda pip install numpy pyyaml scikit-image tqdm --no-input && \
     conda run -n eda conda install pytorch=1.12.0 torchvision=0.13.0 torchaudio=0.12.0 cudatoolkit=11.3 -c pytorch -y && \
-    conda run -n eda pip install tensorboardX easydict mpi4py==4.0.3
+    conda run -n eda pip install tensorboardX easydict mpi4py==4.0.3 && \
+    conda run -n eda pip tensorflow==2.6.0 "protobuf<=3.20.3" && \
+    conda run -n pip install waymo-open-dataset-tf-2-6-0
 
 # 激活 Conda 环境并配置 bash 启动时自动激活
 RUN conda init bash
