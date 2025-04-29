@@ -2,7 +2,7 @@ DATA_CONFIG:
     DATASET: WaymoDataset
     OBJECT_TYPE: &object_type ['TYPE_VEHICLE', 'TYPE_PEDESTRIAN', 'TYPE_CYCLIST']
     
-    DATA_ROOT: '/media/simple/Data/DFPred_Dataset'
+    DATA_ROOT: '/media/simple/Data/Dataset/DF_Dataset'
 
     SPLIT_DIR: {
         'train': 'processed_scenarios_training', 

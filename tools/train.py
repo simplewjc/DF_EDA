@@ -16,8 +16,8 @@ import torch.nn as nn
 import torch.optim.lr_scheduler as lr_sched
 from tensorboardX import SummaryWriter
 
-import sys
-sys.path.append('/media/simple/Data/WorkSpace/DFPred/EDA')
+#import sys
+#sys.path.append('/media/simple/Data/WorkSpace/DFPred/EDA')
 
 from MTR.mtr.datasets import build_dataloader
 from MTR.mtr.config import cfg, cfg_from_list, cfg_from_yaml_file, log_config_to_file
@@ -176,6 +176,9 @@ def main():
     if dist_train:
         model = nn.parallel.DistributedDataParallel(model, device_ids=[cfg.LOCAL_RANK % torch.cuda.device_count()], find_unused_parameters=True)
     logger.info(model)
+    for name, param in model.named_parameters():
+        logger.info(f"{name}: {param.dtype}")
+        break  
     num_total_params = sum([x.numel() for x in model.parameters()])
     logger.info(f'Total number of parameters: {num_total_params}')
 
