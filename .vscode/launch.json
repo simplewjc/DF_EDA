@@ -111,7 +111,7 @@
                 "--batch_size",
                 "3",
                 "--ckpt",
-                "../output/waymo/eda+50_percent_data/eda_b8_e30_t50_v25_new/ckpt/checkpoint_epoch_30.pth",
+                "../ckpt/checkpoint_epoch_30.pth",
                 "--save_to_file",
                 "--extra_tag",
                 "eda_df_result_debug"
@@ -119,7 +119,29 @@
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/tools"  
             },
-            "cwd": "/media/simple/Data/WorkSpace/DFPred/EDA/tools",  
+            "cwd": "/media/simple/Data/WorkSpace/DF_EDA/tools",  
+        },
+        {
+            "name": "dfPred_pred_debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tools/pred.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--cfg_file",
+                "cfgs/dfPred/df_eda_pred.yaml",
+                "--batch_size",
+                "3",
+                "--ckpt",
+                "../ckpt/checkpoint_epoch_39.pth",
+                "--save_to_file",
+                "--extra_tag",
+                "eda_df_result_debug"
+            ],
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/tools"  
+            },
+            "cwd": "/media/simple/Data/WorkSpace/DF_EDA/tools",  
         },
         {
             "name": "eval_gt_and_pred_debug",

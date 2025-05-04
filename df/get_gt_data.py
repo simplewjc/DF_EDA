@@ -44,6 +44,6 @@ def create_gt_data_from_processed_files(processed_dir, output_file):
     print(f"GT data saved to {output_file}")
 
 if __name__ == '__main__':
-    processed_dir = '/media/simple/Data/DFPred_Dataset/processed_scenarios_testing_A_full'
+    processed_dir = '/media/simple/Data/Dataset/DF_Dataset/processed_scenarios_testing_A_full'
     output_file = './output/gt_data_df_test_A.pkl'
     create_gt_data_from_processed_files(processed_dir, output_file)

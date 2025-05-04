@@ -7,12 +7,15 @@ DATA_CONFIG:
     SPLIT_DIR: {
         'train': 'processed_scenarios_training', 
         # 'test': 'processed_scenarios_testing_A_full'
-        'test': 'processed_scenarios_testing_A_part'
+        #'test': 'processed_scenarios_testing_A_part'
+        'test': 'processed_scenarios_testing_B1_part'
     }
 
     INFO_FILE: {
         'train': 'processed_scenarios_training_infos.pkl', 
-        'test': 'processed_scenarios_testA_full_infos.pkl'
+        # 'test': 'processed_scenarios_testA_full_infos.pkl'
+        #'test': 'processed_scenarios_testA_part_infos.pkl'
+        'test': 'processed_scenarios_testB1_part_infos.pkl'
     }
 
     SAMPLE_INTERVAL: {
