@@ -6,7 +6,7 @@ from eda.datasets.waymo.waymo_eval import waymo_evaluation
 
 # 直接定义预测和真值数据文件路径
 # PRED_FILE = '/media/simple/Data/WorkSpace/DFPred/EDA/output/dfPred/df_eda_test/eda_df_result_debug/eval/epoch_30/default/result_nms-2.5.pkl'  # 替换为参赛者的预测文件路径
-PRED_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/dfPred/df_eda_pred/eda_df_result_debug/eval/epoch_39/default/result_processed_scenarios_testing_A_part.pkl'
+PRED_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/dfPred/df_eda_pred/df_eda_pred/pred/epoch_39/default/result_processed_scenarios_testing_A_part.pkl'
 # GT_FILE = '/media/simple/Data/WorkSpace/DFPred/EDA/output/gt_data_df_test_A.pkl'  # 替换为真值数据文件路径
 GT_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/gt_data_df_test_A.pkl'
 TOP_K = 6 # 规划改成1

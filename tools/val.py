@@ -211,8 +211,8 @@ def main():
     #     ckpt_save_time_interval=args.ckpt_save_time_interval
     # )
 
-    logger.info('**********************End training %s/%s(%s)**********************\n\n\n'
-                % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
+    # logger.info('**********************End training %s/%s(%s)**********************\n\n\n'
+    #             % (cfg.EXP_GROUP_PATH, cfg.TAG, args.extra_tag))
 
 
     logger.info('**********************Start evaluation %s/%s(%s)**********************' %

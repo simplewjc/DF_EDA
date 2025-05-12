@@ -129,11 +129,11 @@
             "console": "integratedTerminal",
             "args": [
                 "--cfg_file",
-                "cfgs/dfPred/df_eda_pred.yaml",
+                "docker_cfgs/dfPred/df_eda_pred.yaml",
                 "--batch_size",
                 "3",
                 "--ckpt",
-                "../ckpt/checkpoint_epoch_39.pth",
+                "../ckpt/ex5_checkpoint_epoch_39.pth",
                 "--save_to_file",
                 "--extra_tag",
                 "eda_df_result_debug"

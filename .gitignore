@@ -13,4 +13,5 @@ data/
 *.html
 df/df_output/
 ckpt/
-result/
+df_result/
+temp/

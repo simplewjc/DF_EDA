@@ -1,5 +1,7 @@
 # 启用 BuildKit 加速构建
-# DOCKER_BUILDKIT=1 docker build -t df_image .
+
+# DOCKER_BUILDKIT=1 docker build -t simplewjc/df_eda_image:v3 -f Dockerfile.v3 .
+# DOCKER_BUILDKIT=1 docker build --no-cache -t simplewjc/df_eda_image:v3 -f Dockerfile.v3 .
 
 # 基础镜像：Ubuntu 20.04 + CUDA 11.7
 FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
@@ -42,26 +44,27 @@ ENV CONDARC=$CONDA_DIR/.condarc
 # 设置 pip 镜像源为清华镜像
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-# test
-RUN conda create -n testenv python=3.8 -y && \
-    conda install -n testenv pytorch=1.12.0 torchvision=0.13.0 torchaudio=0.12.0 cudatoolkit=11.3 -c pytorch -y
-
 # 创建并激活 Conda 环境以及安装依赖
-RUN conda create -n eda python=3.8 -y && \
-    conda run -n eda python -m pip install pip==21.2.4 && \
-    conda run -n eda pip install numpy pyyaml scikit-image tqdm --no-input && \
-    conda run -n eda conda install pytorch=1.12.0 torchvision=0.13.0 torchaudio=0.12.0 cudatoolkit=11.3 -c pytorch -y && \
-    conda run -n eda pip install tensorboardX easydict mpi4py==4.0.3 
-
+RUN conda create -n df_eda python=3.8 -y && \
+    conda run -n df_eda python -m pip install pip==21.2.4 && \
+    conda run -n df_eda pip install numpy pyyaml scikit-image tqdm --no-input && \
+    conda run -n df_eda conda install pytorch=1.12.0 torchvision=0.13.0 torchaudio=0.12.0 cudatoolkit=11.3 -c pytorch -y && \
+    conda run -n df_eda pip install tensorboardX easydict mpi4py==4.0.3 && \
+    conda run -n df_eda pip install tensorflow==2.6.0 "protobuf<=3.20.3" && \
+    conda run -n df_eda pip install waymo-open-dataset-tf-2-6-0
+    
 # 激活 Conda 环境并配置 bash 启动时自动激活
 RUN conda init bash
 
 # 复制项目代码到容器中
 WORKDIR /root/workspace
-COPY . /root/workspace/EDA
+COPY . /root/workspace/DF_EDA
 
 # 清理不必要的文件，减小镜像体积
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
 
 # 设置默认命令，显式激活 Conda 环境
-CMD ["/bin/bash", "-c", "conda activate eda && exec bash"]
+# 激活环境时写入 .bashrc
+RUN echo "conda activate df_eda" >> /root/.bashrc
+
+CMD ["bash", "--init-file", "/root/.bashrc"]

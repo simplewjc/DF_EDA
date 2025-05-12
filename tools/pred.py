@@ -72,7 +72,8 @@ def pred_with_single_ckpt(model, test_loader, args, eval_output_dir, logger, epo
         it, epoch = -1, -1
     model.cuda()
 
-    logger.info(f'*************** LOAD MODEL (epoch={epoch}, iter={it}) for EVALUATION *****************')
+    logger.info(f'*************** LOAD MODEL (ckpt={args.ckpt}) for Prediction *****************')
+    logger.info(f'*************** LOAD MODEL (epoch={epoch}, iter={it}) for Prediction *****************')
     # start evaluation
     eval_utils.pred_result(
         cfg, model, test_loader, epoch_id, logger, dist_test=dist_test,
@@ -169,7 +170,7 @@ def main():
     output_dir = root_dir / 'output' / cfg.EXP_GROUP_PATH / cfg.TAG / args.extra_tag
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    eval_output_dir = output_dir / 'eval'
+    eval_output_dir = output_dir / 'pred'
 
     if not args.eval_all:
         num_list = re.findall(r'\d+', os.path.split(args.ckpt)[-1]) if args.ckpt is not None else []

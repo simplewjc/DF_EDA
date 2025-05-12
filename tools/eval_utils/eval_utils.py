@@ -102,7 +102,7 @@ def pred_result(cfg, model, dataloader, epoch_id, logger, dist_test=False, save_
 
     dataset = dataloader.dataset
 
-    logger.info('*************** EPOCH %s EVALUATION *****************' % epoch_id)
+    logger.info('*************** PREDICTION *****************')
     if dist_test:
         if not isinstance(model, torch.nn.parallel.DistributedDataParallel):
             num_gpus = torch.cuda.device_count()
@@ -133,7 +133,7 @@ def pred_result(cfg, model, dataloader, epoch_id, logger, dist_test=False, save_
             remaining_time = second_each_iter * (len(dataloader) - i)
             disp_str = ', '.join([f'{key}={val:.3f}' for key, val in disp_dict.items() if key != 'lr'])
             batch_size = batch_dict.get('batch_size', None)
-            logger.info(f'eval: epoch={epoch_id}, batch_iter={i}/{len(dataloader)}, batch_size={batch_size}, iter_cost={second_each_iter:.2f}s, '
+            logger.info(f'pred: batch_iter={i}/{len(dataloader)}, batch_size={batch_size}, iter_cost={second_each_iter:.2f}s, '
                         f'time_cost: {progress_bar.format_interval(past_time)}/{progress_bar.format_interval(remaining_time)}, '
                         f'{disp_str}')
 
@@ -162,7 +162,7 @@ def pred_result(cfg, model, dataloader, epoch_id, logger, dist_test=False, save_
         pickle.dump(pred_dicts, f)
 
     logger.info('Result is save to %s' % result_dir)
-    logger.info('****************Evaluation done.*****************')
+    logger.info('**************** Prediction done.*****************')
 
 
 if __name__ == '__main__':
