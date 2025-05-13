@@ -18,6 +18,7 @@ python3 val.py \
     --cfg_file docker_cfgs/dfPred/df_eda_val.yaml \
     --batch_size 3 \
     --not_eval_with_train \
-    --ckpt ../ckpt/ex2_checkpoint_epoch_30.pth \
+    --ckpt /root/workspace/EX_CKPT/eda_b8_e30_t25_notv/ckpt/checkpoint_epoch_20.pth \
     --extra_tag df_eda_val
 
+#--ckpt ../ckpt/ex2_checkpoint_epoch_30.pth \

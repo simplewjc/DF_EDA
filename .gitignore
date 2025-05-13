@@ -11,7 +11,8 @@ data/
 .yaml
 *.png
 *.html
-df/df_output/
 ckpt/
-df_result/
+df/df_output/
+df_pred_result/
+output/
 temp/

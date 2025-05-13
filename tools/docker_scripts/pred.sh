@@ -4,7 +4,7 @@
 # --------------------pred in docker----------------------------
 
 # 注意一定要检查 --cfg_file docker_cfgs/dfPred/df_eda_pred.yaml
-# 确保 SPLIT_DIR.test 与 INFO_FILE.test 为想要预测
+# 确保 SPLIT_DIR.test 与 INFO_FILE.test 为想要预测的文件/目录
 
 # SPLIT_DIR: {
 #     'train': 'processed_scenarios_training', 

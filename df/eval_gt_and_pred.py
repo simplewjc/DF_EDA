@@ -9,6 +9,8 @@ from eda.datasets.waymo.waymo_eval import waymo_evaluation
 PRED_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/dfPred/df_eda_pred/df_eda_pred/pred/epoch_39/default/result_processed_scenarios_testing_A_part.pkl'
 # GT_FILE = '/media/simple/Data/WorkSpace/DFPred/EDA/output/gt_data_df_test_A.pkl'  # 替换为真值数据文件路径
 GT_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/gt_data_df_test_A.pkl'
+
+
 TOP_K = 6 # 规划改成1
 EVAL_SECOND = 8 # 3/5/8s
 NUM_MODES_FOR_EVAL = 6 # 规划改成1
