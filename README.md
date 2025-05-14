@@ -6,9 +6,9 @@ Author name: 汪建成
 
 Author school: 吉林大学
 
-Author email: wjc24@mails.jlu.edu.com
+Author email: wjc24@mails.jlu.edu.cn (镜像中部分文件误写为 .com)
 
-## 目录说明
+## Docker 中 DF_EDA 项目目录说明
 
 /ckpt 目录提供本组进行的六组实验的关键 pth 权重文件,其中 ex5_checkpoint_epoch_39.pth 为最佳模型权重文件 （镜像中提供）
 
@@ -41,6 +41,21 @@ Author email: wjc24@mails.jlu.edu.com
 ## 训练及评估日志总结
 本人共基于 Waymo 及 DF 数据集进行六组实验，训练及评估日志总结详情见：
 
-[详细训练及评估日志总结](训练及评估日志总结详细版.md)
-[概要训练及评估日志总结](训练及评估日志总结概要版.md)
+[训练及评估日志总结详细版](训练及评估日志总结详细版.md)
+[训练及评估日志总结概要版](训练及评估日志总结概要版.md)
 
+## Docker 镜像说明
+
+本小组提供 simplewjc/df_eda_image:v3 镜像
+
+采用 docker save 导出镜像：
+```
+docker save -o simplewjc__df_eda_image.tar simplewjc/df_eda_image:v3
+```
+
+请将提交的 simplewjc__df_eda_image.tar 文件下载到主机
+
+通过 docker load 导入镜像：
+```
+docker load -i simplewjc__df_eda_image.tar
+```

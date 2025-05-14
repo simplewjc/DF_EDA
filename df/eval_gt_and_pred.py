@@ -9,7 +9,7 @@ from waymo_eval import waymo_evaluation
 
 # 使用相对路径定义预测和真值数据文件路径
 # 确保自己的终端当前目录为 DF_EDA 
-# YOUR_PROJECT_PATH/DF_EDA# python3 ./df/eval_gt_and_pred.py 
+# ....../DF_EDA# python3 ./df/eval_gt_and_pred.py 
 from pathlib import Path
 import os
 print("当前工作目录为：", os.getcwd()) # DF_EDA
