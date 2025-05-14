@@ -45,9 +45,9 @@ def create_gt_data_from_processed_files(processed_dir, output_file):
 
 if __name__ == '__main__':
     # processed_dir = '/root/workspace/Dataset/DF_Dataset/processed_scenarios_testing_A_full'
-    # output_file = '../df_pred_result/gt_data_df_test_A.pkl'
+    # output_file = 'df_pred_result/gt_data_df_test_A.pkl'
     
     # 确保 processed_dir 及 output_file 的正确性
     processed_dir = '/root/workspace/Dataset/DF_Dataset/processed_scenarios_testing_B_full'
-    output_file = '../df_pred_result/gt_data_df_test_B.pkl'
+    output_file = 'df_pred_result/gt_data_df_test_B1.pkl'
     create_gt_data_from_processed_files(processed_dir, output_file)

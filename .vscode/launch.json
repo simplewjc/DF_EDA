@@ -5,6 +5,8 @@
 
     
     // debugpy 前确定自己当前的 workspaceFolder在EDA目录
+    
+    // 如你想进行项目调试，请自行更改相关参数
     "version": "0.2.0", 
     "configurations": [
         {

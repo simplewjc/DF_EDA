@@ -2,13 +2,27 @@ import pickle
 import tensorflow as tf
 import numpy as np
 
-from eda.datasets.waymo.waymo_eval import waymo_evaluation
+# from eda.datasets.waymo.waymo_eval import waymo_evaluation
 
-# 直接定义预测和真值数据文件路径
-# PRED_FILE = '/media/simple/Data/WorkSpace/DFPred/EDA/output/dfPred/df_eda_test/eda_df_result_debug/eval/epoch_30/default/result_nms-2.5.pkl'  # 替换为参赛者的预测文件路径
-PRED_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/dfPred/df_eda_pred/df_eda_pred/pred/epoch_39/default/result_processed_scenarios_testing_A_part.pkl'
-# GT_FILE = '/media/simple/Data/WorkSpace/DFPred/EDA/output/gt_data_df_test_A.pkl'  # 替换为真值数据文件路径
-GT_FILE = '/media/simple/Data/WorkSpace/DF_EDA/output/gt_data_df_test_A.pkl'
+# 导入官方提供的测试脚本
+from waymo_eval import waymo_evaluation
+
+# 使用相对路径定义预测和真值数据文件路径
+# 确保自己的终端当前目录为 DF_EDA 
+# YOUR_PROJECT_PATH/DF_EDA# python3 ./df/eval_gt_and_pred.py 
+from pathlib import Path
+import os
+print("当前工作目录为：", os.getcwd()) # DF_EDA
+# PRED_FILE = Path('df_pred_result/result_processed_scenarios_testing_A_part.pkl')
+# GT_FILE = Path('df_pred_result/gt_data_df_test_A.pkl')
+PRED_FILE = Path('df_pred_result/result_processed_scenarios_testing_B1_part.pkl')
+GT_FILE = Path('df_pred_result/gt_data_df_test_B1.pkl')
+
+# 直接定义预测和真值数据文件路径 （官方提供 使用绝对路径）
+# PRED_FILE = '......../DF_EDA/df_pred_result/result_processed_scenarios_testing_A_part.pkl'
+# GT_FILE = '......../DF_EDA/df_pred_result/gt_data_df_test_A.pkl'
+# PRED_FILE = '......../DF_EDA/df_pred_result/result_processed_scenarios_testing_B1_part.pkl'
+# GT_FILE = '......../DF_EDA/df_pred_result/gt_data_df_test_B1.pkl'
 
 
 TOP_K = 6 # 规划改成1

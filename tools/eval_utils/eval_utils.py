@@ -158,10 +158,22 @@ def pred_result(cfg, model, dataloader, epoch_id, logger, dist_test=False, save_
         result_file = f'result_{test_name}.pkl'
     else:
         result_file = f'result_adaptive-nms.pkl'
+        
     with open(result_dir / result_file, 'wb') as f:
         pickle.dump(pred_dicts, f)
-
     logger.info('Result is save to %s' % result_dir)
+    
+
+    # 便于查看结果，可注释
+    # df_pred_result/ 目录结果会进行覆盖，上述 result_dir/ 目录不会进行覆盖
+    from pathlib import Path
+    df_pred_result_dir = Path("/root/workspace/DF_EDA/df_pred_result")  # 更改路径
+    df_pred_result_dir.mkdir(parents=True, exist_ok=True)
+    with open(df_pred_result_dir / result_file, 'wb') as f:
+        pickle.dump(pred_dicts, f)
+    logger.info('Result is also save to %s' % df_pred_result_dir)
+    
+    
     logger.info('**************** Prediction done.*****************')
 
 

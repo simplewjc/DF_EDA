@@ -17,7 +17,7 @@ docker run --gpus all \
   -v /media/simple/Data/waymo_open_dataset_motion_v_1_1_0:/root/workspace/Dataset/waymo_open_dataset_motion_v_1_1_0 \
   -v /media/simple/Data/Dataset/Waymo_Dataset:/root/workspace/Dataset/Waymo_Dataset \
   -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
-  -v /home/DF_EDA:/root/workspace/DF_EDA \
+  -v /media/simple/Data/docker_project/DF_EDA:/root/workspace/DF_EDA \
   simplewjc/df_eda_image:v3 \
   bash
 
@@ -45,6 +45,7 @@ docker run --gpus all \
 # docker run --gpus all \
 #   -it \
 #   --memory=32g --memory-swap=60g \
+#   --shm-size=30g \
 #   -v YOUR_WOMD_PATH/waymo_open_dataset_motion_v_1_1_0/scenario:/root/workspace/Dataset/waymo_open_dataset_motion_v_1_1_0/scenario \
 #   -v YOUR_Waymo_Dataset_PATH/Waymo_Dataset:/root/workspace/Dataset/Waymo_Dataset \
 #   -v YOUR_DF_Dataset_PATH/DF_Dataset:/root/workspace/Dataset/DF_Dataset \

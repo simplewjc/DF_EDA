@@ -12,13 +12,12 @@
 # cd /root/workspace/DF_EDA/tools
 # ./docker_scripts/val.sh
 
-# 更改 ckpt 选择需要评测模型权重
+# 更改 ckpt 选择进行测试
 
-python3 val.py \
-    --cfg_file docker_cfgs/dfPred/df_eda_val.yaml \
+python3 test.py \
+    --cfg_file docker_cfgs/dfPred/df_eda_test.yaml \
     --batch_size 3 \
-    --not_eval_with_train \
     --ckpt ../ckpt/ex5_checkpoint_epoch_39.pth \
-    --extra_tag df_eda_val
+    --extra_tag df_eda_test
 
 #--ckpt ../ckpt/ex2_checkpoint_epoch_30.pth \
