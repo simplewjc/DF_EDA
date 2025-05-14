@@ -9,7 +9,7 @@ data/
 **egg-info**
 *.pdf
 .yaml
-*.png
+#*.png
 *.html
 ckpt/
 df/df_output/
