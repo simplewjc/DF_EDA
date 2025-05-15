@@ -6,7 +6,7 @@ Author name: 汪建成
 
 Author school: 吉林大学
 
-Author email: wjc24@mails.jlu.edu.cn (镜像中部分文件误写为 .com)
+Author email: wjc24@mails.jlu.edu.cn
 
 ## Docker 中 DF_EDA 项目目录说明
 
