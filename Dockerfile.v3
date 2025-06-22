@@ -1,3 +1,8 @@
+######################################
+# 本版本 dockerfile文件使用的基础镜像在项目迁移时可能存在编译问题
+# 请关注 Dockerfile.v5 版本
+######################################
+
 # 启用 BuildKit 加速构建
 
 # DOCKER_BUILDKIT=1 docker build -t simplewjc/df_eda_image:v3 -f Dockerfile.v3 .
