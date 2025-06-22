@@ -34,16 +34,16 @@
 
 
 # 预测结果完整验证(example)
-docker run --gpus all \
-  -it \
-  --memory=32g --memory-swap=60g \
-  --shm-size=30g \
-  -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
-  simplewjc/df_eda_image:v3 \
-  bash
+# docker run --gpus all \
+#   -it \
+#   --memory=32g --memory-swap=60g \
+#   --shm-size=30g \
+#   -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
+#   simplewjc/df_eda_image:v3 \
+#   bash
 
 
-# 项目完整复现流程 (example)
+# # 项目完整复现流程 (example)
 # docker run --gpus all \
 #   -it \
 #   --memory=30g --memory-swap=60g \
@@ -53,3 +53,23 @@ docker run --gpus all \
 #   -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
 #   simplewjc/df_eda_image:v3 \
 #   bash
+
+# docker run --gpus all \
+#   -it \
+#   --memory=30g --memory-swap=60g \
+#   --shm-size=30g \
+#   -v /media/simple/Data/waymo_open_dataset_motion_v_1_1_0:/root/workspace/Dataset/waymo_open_dataset_motion_v_1_1_0 \
+#   -v /media/simple/Data/Dataset/Waymo_Dataset:/root/workspace/Dataset/Waymo_Dataset \
+#   -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
+#   simplewjc/df_eda_image:v4 \
+#   bash
+
+docker run --gpus all \
+  -it \
+  --memory=30g --memory-swap=60g \
+  --shm-size=30g \
+  -v /media/simple/Data/waymo_open_dataset_motion_v_1_1_0:/root/workspace/Dataset/waymo_open_dataset_motion_v_1_1_0 \
+  -v /media/simple/Data/Dataset/Waymo_Dataset:/root/workspace/Dataset/Waymo_Dataset \
+  -v /media/simple/Data/Dataset/DF_Dataset:/root/workspace/Dataset/DF_Dataset \
+  simplewjc/df_eda_image:v5 \
+  bash
